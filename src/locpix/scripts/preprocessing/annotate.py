@@ -63,6 +63,13 @@ def main():
         action="store_true",
         help="if specified then annotate two types of cell"
     )
+    parser.add_argument(
+        "-f",
+        "--input_folder",
+        action="store",
+        type=str,
+        help="if specified then this is the location of the input folder"
+    )
 
     args = parser.parse_args()
 
@@ -93,10 +100,13 @@ def main():
             json.dump(metadata, outfile)
 
     # list items
-    if args.relabel:
-        input_folder = os.path.join(project_folder, "annotate/annotated")
+    if args.input_folder is None:
+        if args.relabel:
+            input_folder = os.path.join(project_folder, "annotate/annotated")
+        else:
+            input_folder = os.path.join(project_folder, "preprocess/no_gt_label")
     else:
-        input_folder = os.path.join(project_folder, "preprocess/no_gt_label")
+        input_folder = os.path.join(project_folder, args.input_folder)
     print(input_folder)
     try:
         files = os.listdir(input_folder)
